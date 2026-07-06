@@ -3,58 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Vida Sem Conexão</title>
+    <title>A Vida Sem Conexão - Expansão</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="main-menu" class="screen">
         <h1>A Vida Sem Conexão</h1>
-        <p>O ano é 2026. A rede global colapsou permanentemente. Sem feeds, sem nuvem. Apenas a terra.</p>
-        <button onclick="showStory()">Iniciar Jornada</button>
-    </div>
-
-    <div id="story-screen" class="screen hidden">
-        <h2>Capítulo 1: O Retorno às Raízes</h2>
-        <div class="story-text">
-            <p>Quando os servidores desligaram, o mundo silenciou. Sem tutoriais online ou entregas por aplicativo, a sobrevivência voltou a depender do trabalho manual.</p>
-            <p>Você herdou uma pequena propriedade. Sua missão agora é reajustar-se à realidade física: preparar a terra, plantar e colher para garantir o sustento da comunidade local.</p>
-        </div>
-        <button onclick="startGame()">Começar a Trabalhar</button>
+        <p>A rede caiu. A terra ficou. Construa sua fazenda do zero, negocie no mercado local e expanda sua produção.</p>
+        <button onclick="startGame()">Iniciar Jornada</button>
     </div>
 
     <div id="game-container" class="hidden">
-        <div id="objectives-panel">
-            <h3>Objetivos</h3>
-            <ul id="objectives-list">
-                <li id="obj-plow">Preparar a terra com a Enxada (0/3)</li>
-                <li id="obj-plant" class="locked">Plantar as sementes (0/3)</li>
-                <li id="obj-harvest" class="locked">Colher o alimento maduro (0/3)</li>
-            </ul>
+        
+        <div id="status-panel">
+            <div class="economy">
+                <span id="score-display">Pontuação: 0</span> | 
+                <span id="coins-display">Moedas: $ 15</span>
+            </div>
+            <h3>Objetivo Atual</h3>
+            <p id="current-objective" class="obj-text">Preparar 3 pedaços de terra</p>
+            <progress id="obj-progress" value="0" max="3"></progress>
         </div>
 
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            <div id="subtitles" class="hidden">Texto da história aqui...</div>
+        </div>
 
         <div id="hud">
             <div class="controls-info">
                 <h4>Comandos:</h4>
-                <p><strong>W, A, S, D</strong> ou <strong>Setas</strong>: Movimentar Fazendeiro</p>
-                <p><strong>Teclas 1, 2, 3</strong>: Equipar Item do Inventário</p>
-                <p><strong>Espaço</strong>: Usar item equipado no quadradinho marrom</p>
+                <p><strong>W A S D</strong>: Mover | <strong>1, 2, 3</strong>: Equipar</p>
+                <p><strong>Espaço</strong>: Usar item / Abrir Mercado / Abrir Baú</p>
+                <p><em>(Aproxime-se da Barraca ou do Baú e aperte Espaço)</em></p>
             </div>
             
             <div class="inventory-container">
-                <h4>Inventário (Max: 3 por item)</h4>
+                <h4>Sua Mochila (Max: 3)</h4>
                 <div class="inventory-slots">
                     <div class="slot active" id="slot-0">
                         <span class="key">1</span>
                         <span class="name">Enxada</span>
-                        <span class="count">1/1</span>
+                        <span class="count">Inf</span>
                     </div>
                     <div class="slot" id="slot-1">
                         <span class="key">2</span>
                         <span class="name">Sementes</span>
-                        <span class="count" id="count-seeds">3/3</span>
+                        <span class="count" id="count-seeds">0/3</span>
                     </div>
                     <div class="slot" id="slot-2">
                         <span class="key">3</span>
@@ -64,13 +60,40 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="victory-screen" class="screen hidden">
-        <h2>Objetivo Concluído!</h2>
-        <p>Você conseguiu colher seus primeiros alimentos sem nenhuma ajuda digital.</p>
-        <p>A comunidade agradece. A vida offline pode ser dura, mas é real e próspera.</p>
-        <button onclick="restartGame()">Jogar Novamente</button>
+        <div id="market-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Barraca de Comércio</h2>
+                <p>Venda sua produção e compre suprimentos.</p>
+                <div class="market-actions">
+                    <button onclick="marketSell()">Vender Colheita (+$10)</button>
+                    <button onclick="marketBuySeed()">Comprar Semente (-$5)</button>
+                    <button onclick="marketUpgrade()">Expandir Terra (-$50)</button>
+                </div>
+                <button class="close-btn" onclick="closeModals()">Sair da Barraca</button>
+            </div>
+        </div>
+
+        <div id="chest-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Baú de Armazenamento</h2>
+                <p>Guarde o excesso para não sobrecarregar a mochila.</p>
+                <div class="chest-grid">
+                    <div class="chest-item">
+                        <span>Sementes Guardadas: <b id="chest-seeds">0</b></span>
+                        <button onclick="chestStore('seeds')">Guardar</button>
+                        <button onclick="chestTake('seeds')">Pegar</button>
+                    </div>
+                    <div class="chest-item">
+                        <span>Colheitas Guardadas: <b id="chest-crops">0</b></span>
+                        <button onclick="chestStore('crops')">Guardar</button>
+                        <button onclick="chestTake('crops')">Pegar</button>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeModals()">Fechar Baú</button>
+            </div>
+        </div>
+
     </div>
 
     <script src="main.js"></script>

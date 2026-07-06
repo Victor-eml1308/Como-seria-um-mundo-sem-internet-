@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Vida Sem Conexão</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="main-menu" class="screen">
+        <h1>A Vida Sem Conexão</h1>
+        <p>O ano é 2026. A rede global colapsou permanentemente. Sem feeds, sem nuvem. Apenas a terra.</p>
+        <button onclick="showStory()">Iniciar Jornada</button>
+    </div>
+
+    <div id="story-screen" class="screen hidden">
+        <h2>Capítulo 1: O Retorno às Raízes</h2>
+        <div class="story-text">
+            <p>Quando os servidores desligaram, o mundo silenciou. Sem tutoriais online ou entregas por aplicativo, a sobrevivência voltou a depender do trabalho manual.</p>
+            <p>Você herdou uma pequena propriedade. Sua missão agora é reajustar-se à realidade física: preparar a terra, plantar e colher para garantir o sustento da comunidade local.</p>
+        </div>
+        <button onclick="startGame()">Começar a Trabalhar</button>
+    </div>
+
+    <div id="game-container" class="hidden">
+        <div id="objectives-panel">
+            <h3>Objetivos</h3>
+            <ul id="objectives-list">
+                <li id="obj-plow">Preparar a terra com a Enxada (0/3)</li>
+                <li id="obj-plant" class="locked">Plantar as sementes (0/3)</li>
+                <li id="obj-harvest" class="locked">Colher o alimento maduro (0/3)</li>
+            </ul>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <div id="hud">
+            <div class="controls-info">
+                <h4>Comandos:</h4>
+                <p><strong>W, A, S, D</strong> ou <strong>Setas</strong>: Movimentar Fazendeiro</p>
+                <p><strong>Teclas 1, 2, 3</strong>: Equipar Item do Inventário</p>
+                <p><strong>Espaço</strong>: Usar item equipado no quadradinho marrom</p>
+            </div>
+            
+            <div class="inventory-container">
+                <h4>Inventário (Max: 3 por item)</h4>
+                <div class="inventory-slots">
+                    <div class="slot active" id="slot-0">
+                        <span class="key">1</span>
+                        <span class="name">Enxada</span>
+                        <span class="count">1/1</span>
+                    </div>
+                    <div class="slot" id="slot-1">
+                        <span class="key">2</span>
+                        <span class="name">Sementes</span>
+                        <span class="count" id="count-seeds">3/3</span>
+                    </div>
+                    <div class="slot" id="slot-2">
+                        <span class="key">3</span>
+                        <span class="name">Colheita</span>
+                        <span class="count" id="count-crops">0/3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="victory-screen" class="screen hidden">
+        <h2>Objetivo Concluído!</h2>
+        <p>Você conseguiu colher seus primeiros alimentos sem nenhuma ajuda digital.</p>
+        <p>A comunidade agradece. A vida offline pode ser dura, mas é real e próspera.</p>
+        <button onclick="restartGame()">Jogar Novamente</button>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
